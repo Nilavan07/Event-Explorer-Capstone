@@ -6,7 +6,7 @@ const router = express.Router();
 
 // Health check
 // GET /api/users - Get all users
-router.get("/", async (req, res) => {
+router.get("/index", async (req, res) => {
   try {
     const users = await User.find(); // You can apply .select() to limit fields if needed
     res.status(200).json(users);
