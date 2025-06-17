@@ -50,7 +50,7 @@ export const useAuthStore = create<AuthState>()(
       isLoggedIn: false,
       fetchUsers: async () => {
         try {
-          const response = await fetch("http://localhost:5050/api/users");
+          const response = await fetch("https://event-explorer-capstone.onrender.com/api/users");
           if (!response.ok) throw new Error("Failed to fetch users");
 
           const users: User[] = await response.json();
@@ -68,7 +68,7 @@ export const useAuthStore = create<AuthState>()(
       ) => {
         try {
           // Step 1: Fetch users from backend
-          const response = await fetch("http://localhost:5050/api/users");
+          const response = await fetch("https://event-explorer-capstone.onrender.com/api/users");
           let users: User[] = [];
 
           if (response.ok) {
@@ -113,7 +113,7 @@ export const useAuthStore = create<AuthState>()(
       register: async (name: string, email: string, password: string) => {
         try {
           const response = await fetch(
-            "http://localhost:5050/api/users/register",
+            "https://event-explorer-capstone.onrender.com/api/users/register",
             {
               method: "POST",
               headers: {
@@ -179,7 +179,7 @@ export const useAuthStore = create<AuthState>()(
 
         try {
           const response = await fetch(
-            `http://localhost:5050/api/users/${currentUser._id}/favorites`,
+            `https://event-explorer-capstone.onrender.com/api/users/${currentUser._id}/favorites`,
             {
               method: "POST",
               headers: {
@@ -216,7 +216,7 @@ export const useAuthStore = create<AuthState>()(
 
         try {
           const response = await fetch(
-            `http://localhost:5050/api/users/${currentUser._id}/favorites/${eventId}`,
+            `https://event-explorer-capstone.onrender.com/api/users/${currentUser._id}/favorites/${eventId}`,
             {
               method: "DELETE",
               headers: {
@@ -252,7 +252,7 @@ export const useAuthStore = create<AuthState>()(
 
         try {
           const response = await fetch(
-            `http://localhost:5050/api/users/${currentUser._id}`,
+            `https://event-explorer-capstone.onrender.com/api/users/${currentUser._id}`,
             {
               method: "PUT",
               headers: { "Content-Type": "application/json" },
@@ -278,7 +278,7 @@ export const useAuthStore = create<AuthState>()(
 
       addUser: async (userData: Omit<User, "id">) => {
         try {
-          const response = await fetch("http://localhost:5050/api/users", {
+          const response = await fetch("https://event-explorer-capstone.onrender.com/api/users", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(userData),
@@ -299,7 +299,7 @@ export const useAuthStore = create<AuthState>()(
       deleteUser: async (userId: string) => {
         try {
           const response = await fetch(
-            `http://localhost:5050/api/users/${userId}`,
+            `https://event-explorer-capstone.onrender.com/api/users/${userId}`,
             {
               method: "DELETE",
             }
@@ -322,7 +322,7 @@ export const useAuthStore = create<AuthState>()(
       updateUser: async (userId: string, userData: Partial<User>) => {
         try {
           const response = await fetch(
-            `http://localhost:5050/api/users/${userId}`,
+            `https://event-explorer-capstone.onrender.com/api/users/${userId}`,
             {
               method: "PUT",
               headers: { "Content-Type": "application/json" },

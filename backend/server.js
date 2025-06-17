@@ -11,7 +11,10 @@ const PORT = process.env.PORT || 5000;
 
 // ✅ Use CORS properly
 app.use(cors({
-  origin: "http://localhost:8080", // Replace with 5173 if using Vite
+  origin: [
+    "http://localhost:8080",              // optional if you're using 8080
+    "https://eventexplorer-n1ei.vercel.app" //  your deployed frontend
+  ],
   credentials: true,
 }));
 
