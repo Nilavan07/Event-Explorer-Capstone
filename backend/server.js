@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 5000;
 app.use(cors({
   origin: [
     "http://localhost:8080",              // optional if you're using 8080
-    "https://eventexplorer-n1ei.vercel.app" //  your deployed frontend
+    "https://eventexplorer-vt8v.vercel.app" //  your deployed frontend
   ],
   credentials: true,
 }));
