@@ -1,6 +1,11 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+const API_BASE_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5050/api"
+    : "https://event-explorer-capstone.onrender.com/api";
+
 interface User {
   _id: string;
   name: string;
@@ -48,13 +53,13 @@ export const useAuthStore = create<AuthState>()(
         },
       ],
       isLoggedIn: false,
+
       fetchUsers: async () => {
         try {
-          const response = await fetch("https://event-explorer-capstone.onrender.com/api/users");
+          const response = await fetch(`${API_BASE_URL}/users`);
           if (!response.ok) throw new Error("Failed to fetch users");
 
           const users: User[] = await response.json();
-
           set({ users });
         } catch (error) {
           console.error("Fetch users error:", error);
@@ -67,15 +72,13 @@ export const useAuthStore = create<AuthState>()(
         role: "user" | "admin"
       ) => {
         try {
-          // Step 1: Fetch users from backend
-          const response = await fetch("https://event-explorer-capstone.onrender.com/api/users");
+          const response = await fetch(`${API_BASE_URL}/users`);
           let users: User[] = [];
 
           if (response.ok) {
             users = await response.json();
           }
 
-          // Step 2: If no admin exists in fetched users, add manual admin user
           const hasAdmin = users.some((u) => u.role === "admin");
           if (!hasAdmin) {
             users.push({
@@ -89,10 +92,8 @@ export const useAuthStore = create<AuthState>()(
             });
           }
 
-          // Step 3: Update Zustand store with users
           set({ users });
 
-          // Step 4: Try to find a matching user
           const user = users.find(
             (u) =>
               u.email === email && u.password === password && u.role === role
@@ -113,7 +114,7 @@ export const useAuthStore = create<AuthState>()(
       register: async (name: string, email: string, password: string) => {
         try {
           const response = await fetch(
-            "https://event-explorer-capstone.onrender.com/api/users/register",
+            `${API_BASE_URL}/users/register`,
             {
               method: "POST",
               headers: {
@@ -124,15 +125,13 @@ export const useAuthStore = create<AuthState>()(
           );
 
           if (!response.ok) {
-            // Email already exists or server error
             return false;
           }
 
-          const data = await response.json(); // { message, user }
+          const data = await response.json();
 
           const newUser: User = {
             ...data,
-            // Ensure required fields exist
             favorites: data.favorites || [],
             tickets: data.tickets || [],
             role: "user",
@@ -179,7 +178,7 @@ export const useAuthStore = create<AuthState>()(
 
         try {
           const response = await fetch(
-            `https://event-explorer-capstone.onrender.com/api/users/${currentUser._id}/favorites`,
+            `${API_BASE_URL}/users/${currentUser._id}/favorites`,
             {
               method: "POST",
               headers: {
@@ -197,7 +196,7 @@ export const useAuthStore = create<AuthState>()(
 
           const updatedUser = {
             ...currentUser,
-            favorites: data.favorites, // updated from the server
+            favorites: data.favorites,
           };
 
           const updatedUsers = users.map((user) =>
@@ -216,7 +215,7 @@ export const useAuthStore = create<AuthState>()(
 
         try {
           const response = await fetch(
-            `https://event-explorer-capstone.onrender.com/api/users/${currentUser._id}/favorites/${eventId}`,
+            `${API_BASE_URL}/users/${currentUser._id}/favorites/${eventId}`,
             {
               method: "DELETE",
               headers: {
@@ -233,7 +232,7 @@ export const useAuthStore = create<AuthState>()(
 
           const updatedUser = {
             ...currentUser,
-            favorites: data.favorites, // updated favorites from server
+            favorites: data.favorites,
           };
 
           const updatedUsers = users.map((user) =>
@@ -252,7 +251,7 @@ export const useAuthStore = create<AuthState>()(
 
         try {
           const response = await fetch(
-            `https://event-explorer-capstone.onrender.com/api/users/${currentUser._id}`,
+            `${API_BASE_URL}/users/${currentUser._id}`,
             {
               method: "PUT",
               headers: { "Content-Type": "application/json" },
@@ -278,7 +277,7 @@ export const useAuthStore = create<AuthState>()(
 
       addUser: async (userData: Omit<User, "id">) => {
         try {
-          const response = await fetch("https://event-explorer-capstone.onrender.com/api/users", {
+          const response = await fetch(`${API_BASE_URL}/users`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(userData),
@@ -299,7 +298,7 @@ export const useAuthStore = create<AuthState>()(
       deleteUser: async (userId: string) => {
         try {
           const response = await fetch(
-            `https://event-explorer-capstone.onrender.com/api/users/${userId}`,
+            `${API_BASE_URL}/users/${userId}`,
             {
               method: "DELETE",
             }
@@ -322,7 +321,7 @@ export const useAuthStore = create<AuthState>()(
       updateUser: async (userId: string, userData: Partial<User>) => {
         try {
           const response = await fetch(
-            `https://event-explorer-capstone.onrender.com/api/users/${userId}`,
+            `${API_BASE_URL}/users/${userId}`,
             {
               method: "PUT",
               headers: { "Content-Type": "application/json" },
