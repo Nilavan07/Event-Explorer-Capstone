@@ -1,10 +1,8 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-const API_BASE_URL =
-  window.location.hostname === "localhost"
-    ? "http://localhost:5050/api"
-    : "https://event-explorer-capstone.onrender.com/api";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 
 interface User {
   _id: string;
